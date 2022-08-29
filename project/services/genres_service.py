@@ -6,7 +6,7 @@ from project.models import Genre
 
 
 class GenresService:
-    def __init__(self, dao: BaseDAO) -> None:
+    def __init__(self, dao: "BaseDAO") -> None:
         self.dao = dao
 
     def get_item(self, pk: int) -> Genre:

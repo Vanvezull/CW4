@@ -6,7 +6,7 @@ from project.models import Movie
 
 
 class MoviesService:
-    def __init__(self, dao: MoviesDAO) -> None:
+    def __init__(self, dao: "MoviesDAO") -> None:
         self.dao = dao
 
     def get_item(self, pk: int) -> Movie:

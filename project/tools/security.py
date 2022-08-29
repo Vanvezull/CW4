@@ -7,8 +7,8 @@ import jwt
 from flask import current_app, request
 from flask_restx import abort
 
-#from project.container import user_service
-from project.services.users_service import UsersService
+from project.container import user_service
+#from project.services.users_service import UsersService
 
 
 def __generate_password_digest(password: str) -> bytes:
@@ -34,59 +34,59 @@ def compare_password(password_hash, other_password):
     return password_hash == generate_password_hash(other_password)
 
 
-def generate_token(email, password, is_refresh=False):
-    """
-    Генерация новых токенов, а так же пары токенов при окончании времени Access токена
-    :param email:
-    :param password:
-    :param is_refresh:
-    :return:
-    """
+# def generate_token(email, password, is_refresh=False):
+#     """
+#     Генерация новых токенов, а так же пары токенов при окончании времени Access токена
+#     :param email:
+#     :param password:
+#     :param is_refresh:
+#     :return:
+#     """
+#
+#     user = user_service.get_user_by_email(email)
+#
+#     if user is None:
+#         raise abort(404)
+#
+#     if not is_refresh:
+#         if not compare_password(user.password, password):
+#             abort(400)
+#
+#     data = {
+#         "email": user.email
+#     }
+#
+#     min15 = datetime.datetime.utcnow() + datetime.timedelta(minutes=current_app.config['TOKEN_EXPIRE_MINUTES'])
+#     data["exp"] = calendar.timegm(min15.timetuple())
+#     access_token = jwt.encode(data, key=current_app.config['SECRET_KEY'],
+#                                   algorithm=current_app.config['ALGORITHM'])
+#
+#     days130 = datetime.datetime.utcnow() + datetime.timedelta(days=current_app.config['TOKEN_EXPIRE_DAYS'])
+#     data["exp"] = calendar.timegm(days130.timetuple())
+#     refresh_token = jwt.encode(data, key=current_app.config['SECRET_KEY'],
+#                                    algorithm=current_app.config['ALGORITHM'])
+#
+#     return {
+#         "access_token": access_token,
+#         "refresh_token": refresh_token
+#     }
 
-    user = UsersService.get_user_by_email(email)
-
-    if user is None:
-        raise abort(404)
-
-    if not is_refresh:
-        if not compare_password(user.password, password):
-            abort(400)
-
-    data = {
-        "email": user.email
-    }
-
-    min15 = datetime.datetime.utcnow() + datetime.timedelta(minutes=current_app.config['TOKEN_EXPIRE_MINUTES'])
-    data["exp"] = calendar.timegm(min15.timetuple())
-    access_token = jwt.encode(data, key=current_app.config['SECRET_KEY'],
-                              algorithm=current_app.config['ALGORITHM'])
-
-    days130 = datetime.datetime.utcnow() + datetime.timedelta(days=current_app.config['TOKEN_EXPIRE_DAYS'])
-    data["exp"] = calendar.timegm(days130.timetuple())
-    refresh_token = jwt.encode(data, key=current_app.config['SECRET_KEY'],
-                               algorithm=current_app.config['ALGORITHM'])
-
-    return {
-        "access_token": access_token,
-        "refresh_token": refresh_token
-    }
-
-
-def update_token(refresh_token):
-    data = jwt.decode(refresh_token, key=current_app.config['SECRET_KEY'],
-                      algorithms=current_app.config['ALGORITHM'])
-
-    email = data.get('email')
-    password = data.get('password')
-
-    return generate_token(email=email, password=password, is_refresh=True)
-
-
-def get_data_by_token(refresh_token):
-    data = jwt.decode(refresh_token, key=current_app.config['SECRET_KEY'],
-                      algorithms=current_app.config['ALGORITHM'])
-
-    return data
+#
+# def update_token(refresh_token):
+#     data = jwt.decode(refresh_token, key=current_app.config['SECRET_KEY'],
+#                       algorithms=current_app.config['ALGORITHM'])
+#
+#     email = data.get('email')
+#     password = data.get('password')
+#
+#     return generate_token(email=email, password=password, is_refresh=True)
+#
+#
+# def get_data_by_token(refresh_token):
+#     data = jwt.decode(refresh_token, key=current_app.config['SECRET_KEY'],
+#                       algorithms=current_app.config['ALGORITHM'])
+#
+#     return data
 
 
 def auth_required(func):

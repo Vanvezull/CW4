@@ -6,7 +6,7 @@ from project.models import Director
 
 
 class DirectorsService:
-    def __init__(self, dao: BaseDAO) -> None:
+    def __init__(self, dao: "BaseDAO") -> None:
         self.dao = dao
 
     def get_item(self, pk: int) -> Director:

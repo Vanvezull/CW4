@@ -7,7 +7,7 @@ from project.tools.security import generate_token, update_token, get_data_by_tok
 
 
 class UsersService:
-    def __init__(self, dao: UsersDAO) -> None:
+    def __init__(self, dao: "UsersDAO") -> None:
         self.dao = dao
 
     def get_item(self, pk: int) -> User:
